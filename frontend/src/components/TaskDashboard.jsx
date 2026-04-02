@@ -7,7 +7,6 @@ import Task from "./Task";
 export default function TaskDashboard() {
     return (
         <div>
-            <h1>Task Dashboard</h1>
             <Routes>
                 <Route path="/tasks" element={<Tasks />} />
                 <Route path="/tasks/new" element={<TaskNewEdit />} />
