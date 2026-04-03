@@ -10,18 +10,38 @@ import { Input } from "../ui/input"
 import { Button } from "../ui/button";
 
 export default function Login() {
-    const onLogin = () => {
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const onLogin = async () => {
+        try {
+            const response = await fetch("/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
 
+            const text = await response.text();
+            const data = text ? JSON.parse(text) : {};
+
+            if (response.ok) {
+                window.location.href = "/tasks";
+            } else {
+                alert(data.message || "Login failed. Please try again.");
+            }
+
+        } catch (err) {
+            alert("Network error. Please check your connection.");
+        }
     }
     return (
         <div className="p-4 flex justify-center items-center h-screen">
             <FieldSet className="w-full max-w-xs">
                 <FieldGroup>
                     <Field>
-                        <FieldLabel htmlFor="username">Username</FieldLabel>
-                        <Input id="username" type="text" placeholder="username" />
+                        <FieldLabel htmlFor="email">Email</FieldLabel>
+                        <Input id="email" type="text" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         <FieldDescription>
-                            Choose a unique username for your account.
+                            Enter your email address.
                         </FieldDescription>
                     </Field>
                     <Field>
@@ -29,9 +49,9 @@ export default function Login() {
                         <FieldDescription>
                             Must be at least 8 characters long.
                         </FieldDescription>
-                        <Input id="password" type="password" placeholder="••••••••" />
+                        <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </Field>
-                    <Button className="mt-4" variant="default" size="default" onLogin={onLogin}>
+                    <Button className="mt-4" variant="default" size="default" onClick={onLogin}>
                         Login
                     </Button>
                 </FieldGroup>
