@@ -1,5 +1,5 @@
 import './App.css'
-import TaskDashboard from './components/TaskDashboard'
+import TaskDashboard from './components/tasks/TaskDashboard'
 
 function App() {
   return (
