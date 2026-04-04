@@ -25,6 +25,21 @@ export const getTasks = async (req, res) => {
     return res.status(200).json({ message: "Tasks retrieved successfully", tasks });
 };
 
+export const getTask = async (req, res) => {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const task = await prisma.tasks.findFirst({
+        where: { id: parseInt(id), userId }
+    });
+
+    if (!task) {
+        return res.status(404).json({ message: "Task not found or not authorized." });
+    }
+
+    return res.status(200).json({ message: "Task retrieved successfully", task });
+};
+
 export const updateTask = async (req, res) => {
     const { id } = req.params;
     const { title, status } = req.body;

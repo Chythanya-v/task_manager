@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     Field,
     FieldDescription,
@@ -16,12 +16,52 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
-import { createTask } from "../../utils/api";
+import { createTask, fetchTask, updateTask } from "../../utils/api";
+import { useParams } from "react-router";
 
 export default function TaskNewEdit() {
+    const { id } = useParams();
     const [task, setTask] = React.useState("");
     const [status, setStatus] = React.useState("Pending");
+
+    const fetchTaskData = async () => {
+        if (id) {
+            // Fetch task details for editing (not implemented in this snippet)
+            // You would typically use useEffect to fetch the task data and populate the state
+            try {
+                const data = await fetchTask(id);
+                if (data.task) {
+                    setTask(data.task.title);
+                    setStatus(data.task.status);
+                } else {
+                    alert(data.message || "Failed to fetch task details. Please try again.");
+                }
+            } catch (err) {
+                console.error("Error fetching task details:", err);
+                alert("Network error. Please try again.");
+            }
+        }
+    }
+
+    useEffect(() => {
+        fetchTaskData();
+    }, [id]);
+
     const onSubmit = async () => {
+        if (id) {
+            try {
+                const data = await updateTask(id, { title: task, status });
+                if (data.task) {
+                    window.location.href = "/tasks";
+                } else {
+                    alert(data.message || "Failed to update task. Please try again.");
+                }
+            } catch (err) {
+                console.error("Error updating task:", err);
+                alert("Network error. Please try again.");
+            }
+            return;
+        }
         try {
             const data = await createTask({ title: task, status });
             if (data.task) {

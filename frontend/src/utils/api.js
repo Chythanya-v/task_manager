@@ -9,6 +9,16 @@ export const fetchTasks = async () => {
     return response.json();
 };
 
+export const fetchTask = async (id) => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`/api/tasks/${id}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    return response.json();
+};
+
 export const createTask = async (task) => {
     const token = localStorage.getItem("token");
     const response = await fetch(`/api/tasks`, {

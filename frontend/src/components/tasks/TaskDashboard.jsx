@@ -13,7 +13,7 @@ export default function TaskDashboard() {
             <Route path="/login" element={<Login />} />
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/tasks/new" element={<TaskNewEdit />} />
-            <Route path="/tasks/:id" element={<Task />} />
+            <Route path="/tasks/:id" element={<TaskNewEdit />} />
         </Routes>
     );
 }
