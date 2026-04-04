@@ -1,14 +1,21 @@
 
 export const fetchTasks = async () => {
-    const response = await fetch(`/tasks`);
+    const token = localStorage.getItem("token");
+    const response = await fetch(`/api/tasks`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
     return response.json();
 };
 
 export const createTask = async (task) => {
-    const response = await fetch(`/tasks`, {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`/api/tasks`, {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(task)
     });
@@ -16,10 +23,12 @@ export const createTask = async (task) => {
 };
 
 export const updateTask = async (id, task) => {
-    const response = await fetch(`/tasks/${id}`, {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`/api/tasks/${id}`, {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(task)
     });
@@ -27,8 +36,12 @@ export const updateTask = async (id, task) => {
 };
 
 export const deleteTask = async (id) => {
-    const response = await fetch(`/tasks/${id}`, {
-        method: "DELETE"
+    const token = localStorage.getItem("token");
+    const response = await fetch(`/api/tasks/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
     });
     return response.json();
 };

@@ -16,25 +16,22 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
+import { createTask } from "../../utils/api";
 
 export default function TaskNewEdit() {
     const [task, setTask] = React.useState("");
     const [status, setStatus] = React.useState("Pending");
-    const onSubmit = () => {
-        console.log(task, status)
+    const onSubmit = async () => {
         try {
-            const response = fetch("/tasks", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ task, status }),
-            });
-            if (response.ok) {
+            const data = await createTask({ title: task, status });
+            if (data.task) {
                 window.location.href = "/tasks";
             } else {
-                alert("Failed to create task. Please try again.");
+                alert(data.message || "Failed to create task. Please try again.");
             }
         } catch (err) {
             console.error("Error submitting task:", err);
+            alert("Network error. Please try again.");
         }
     }
 

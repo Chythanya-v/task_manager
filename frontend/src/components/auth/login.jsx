@@ -24,6 +24,7 @@ export default function Login() {
             const data = text ? JSON.parse(text) : {};
 
             if (response.ok) {
+                localStorage.setItem("token", data.token);
                 window.location.href = "/tasks";
             } else {
                 alert(data.message || "Login failed. Please try again.");
