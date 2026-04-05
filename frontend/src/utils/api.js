@@ -1,6 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();
-const BASE_URL = process.env.VITE_API_URL;
+
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export const fetchTasks = async () => {
     const token = localStorage.getItem("token");
