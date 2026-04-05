@@ -46,7 +46,7 @@ export default function Signup() {
             <FieldSet className="w-full max-w-xs">
                 <FieldGroup>
                     {alert && (
-                        <Alert class="rounded-sm outline outline-green-200 bg-green-50" variant={alert.type === "success" ? "success" : "destructive"}>
+                        <Alert className="rounded-sm outline outline-green-200 bg-green-50" variant={alert.type === "success" ? "success" : "destructive"}>
                             <AlertTitle>{alert.type === "success" ? "Success" : "Error"}</AlertTitle>
                             <AlertDescription>{alert.message}</AlertDescription>
                         </Alert>
