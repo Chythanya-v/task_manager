@@ -1,7 +1,10 @@
+import dotenv from "dotenv";
+dotenv.config();
+const BASE_URL = process.env.VITE_API_URL;
 
 export const fetchTasks = async () => {
     const token = localStorage.getItem("token");
-    const response = await fetch(`/api/tasks`, {
+    const response = await fetch(`${BASE_URL}/api/tasks`, {
         headers: {
             "Authorization": `Bearer ${token}`
         }
@@ -11,7 +14,7 @@ export const fetchTasks = async () => {
 
 export const fetchTask = async (id) => {
     const token = localStorage.getItem("token");
-    const response = await fetch(`/api/tasks/${id}`, {
+    const response = await fetch(`${BASE_URL}/api/tasks/${id}`, {
         headers: {
             "Authorization": `Bearer ${token}`
         }
@@ -21,7 +24,7 @@ export const fetchTask = async (id) => {
 
 export const createTask = async (task) => {
     const token = localStorage.getItem("token");
-    const response = await fetch(`/api/tasks`, {
+    const response = await fetch(`${BASE_URL}/api/tasks`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -34,7 +37,7 @@ export const createTask = async (task) => {
 
 export const updateTask = async (id, task) => {
     const token = localStorage.getItem("token");
-    const response = await fetch(`/api/tasks/${id}`, {
+    const response = await fetch(`${BASE_URL}/api/tasks/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -47,7 +50,7 @@ export const updateTask = async (id, task) => {
 
 export const deleteTask = async (id) => {
     const token = localStorage.getItem("token");
-    const response = await fetch(`/api/tasks/${id}`, {
+    const response = await fetch(`${BASE_URL}/api/tasks/${id}`, {
         method: "DELETE",
         headers: {
             "Authorization": `Bearer ${token}`
@@ -57,7 +60,7 @@ export const deleteTask = async (id) => {
 };
 
 export const signup = async (email, password) => {
-    const response = await fetch(`/signup`, {
+    const response = await fetch(`${BASE_URL}/signup`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -68,7 +71,7 @@ export const signup = async (email, password) => {
 };
 
 export const login = async (email, password) => {
-    const response = await fetch(`/login`, {
+    const response = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
