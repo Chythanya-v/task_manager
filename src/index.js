@@ -1,13 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
 import rootRouter from "./routes/index.js";
+import cors from "cors";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-
 app.use("/", rootRouter)
+
 app.use(cors({
     origin: 'https://task-manager-kappa-woad.vercel.app/', // your actual Vercel URL
     credentials: true
