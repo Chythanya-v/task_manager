@@ -2,7 +2,6 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Tasks from "./Tasks";
 import TaskNewEdit from "./TaskNewEdit";
-import Task from "./Task";
 import Signup from "../auth/signup";
 import Login from "../auth/login";
 
