@@ -13,6 +13,7 @@ import {
     AlertDescription,
     AlertTitle,
 } from "../ui/alert"
+import { signup } from "../../utils/api";
 
 export default function Signup() {
     const [email, setEmail] = useState("");
@@ -22,17 +23,13 @@ export default function Signup() {
     const onSignup = async () => {
         setAlert(null);
         try {
-            const response = await fetch("/auth/signup", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            });
-
-            const text = await response.text();
-            const data = text ? JSON.parse(text) : {};
-
-            if (response.ok) {
+            const data = await signup(email, password);
+            console.log(data)
+            if (data.user) {
                 setAlert({ type: "success", message: data.message || "User created successfully!" });
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 1000);
             } else {
                 setAlert({ type: "error", message: data.message || "Signup failed. Please try again." });
             }

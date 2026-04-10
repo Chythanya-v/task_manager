@@ -7,7 +7,14 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-    origin: 'https://task-manager-kappa-woad.vercel.app',
+    origin: (origin, callback) => {
+        const allowedOrigins = ['https://task-manager-kappa-woad.vercel.app'];
+        if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost:')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true
 }))
 

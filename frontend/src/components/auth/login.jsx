@@ -8,22 +8,16 @@ import {
 } from "../ui/field"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button";
+import { login } from "../../utils/api";
 
 export default function Login() {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const onLogin = async () => {
         try {
-            const response = await fetch("/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            });
+            const data = await login(email, password);
 
-            const text = await response.text();
-            const data = text ? JSON.parse(text) : {};
-
-            if (response.ok) {
+            if (data.token) {
                 localStorage.setItem("token", data.token);
                 window.location.href = "/tasks";
             } else {

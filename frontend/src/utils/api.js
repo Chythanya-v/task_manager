@@ -60,7 +60,7 @@ export const deleteTask = async (id) => {
 };
 
 export const signup = async (email, password) => {
-    const response = await fetch(`${BASE_URL}/signup`, {
+    const response = await fetch(`${BASE_URL}/auth/signup`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -71,7 +71,7 @@ export const signup = async (email, password) => {
 };
 
 export const login = async (email, password) => {
-    const response = await fetch(`${BASE_URL}/login`, {
+    const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
