@@ -9,11 +9,22 @@ import {
 import { Input } from "../ui/input"
 import { Button } from "../ui/button";
 import { login } from "../../utils/api";
+import { LogIn } from "lucide-react";
 
 export default function Login() {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
+    const [error, setError] = React.useState("");
+    const [isLoading, setIsLoading] = React.useState(false);
+
     const onLogin = async () => {
+        setError("");
+        if (!email || !password) {
+            setError("Please fill in all fields");
+            return;
+        }
+
+        setIsLoading(true);
         try {
             const data = await login(email, password);
 
@@ -21,36 +32,91 @@ export default function Login() {
                 localStorage.setItem("token", data.token);
                 window.location.href = "/tasks";
             } else {
-                alert(data.message || "Login failed. Please try again.");
+                setError(data.message || "Login failed. Please try again.");
             }
-
         } catch (err) {
-            alert("Network error. Please check your connection.");
+            setError("Network error. Please check your connection.");
+        } finally {
+            setIsLoading(false);
         }
     }
+
     return (
-        <div className="p-4 flex justify-center items-center h-screen">
-            <FieldSet className="w-full max-w-xs">
-                <FieldGroup>
-                    <Field>
-                        <FieldLabel htmlFor="email">Email</FieldLabel>
-                        <Input id="email" type="text" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                        <FieldDescription>
-                            Enter your email address.
-                        </FieldDescription>
-                    </Field>
-                    <Field>
-                        <FieldLabel htmlFor="password">Password</FieldLabel>
-                        <FieldDescription>
-                            Must be at least 8 characters long.
-                        </FieldDescription>
-                        <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} />
-                    </Field>
-                    <Button className="mt-4" variant="default" size="default" onClick={onLogin}>
-                        Login
-                    </Button>
-                </FieldGroup>
-            </FieldSet>
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 px-4">
+            <div className="w-full max-w-md">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+                    <div className="flex justify-center mb-6">
+                        <div className="bg-blue-100 p-3 rounded-xl">
+                            <LogIn className="w-6 h-6 text-blue-600" />
+                        </div>
+                    </div>
+
+                    <h1 className="text-2xl font-bold text-center text-slate-900 mb-2">
+                        Welcome Back
+                    </h1>
+                    <p className="text-center text-slate-600 mb-6 text-sm">
+                        Sign in to your account to continue
+                    </p>
+
+                    {error && (
+                        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <p className="text-red-700 text-sm font-medium">{error}</p>
+                        </div>
+                    )}
+
+                    <FieldSet className="space-y-0">
+                        <FieldGroup className="space-y-6">
+                            <Field className="space-y-2">
+                                <FieldLabel htmlFor="email" className="text-slate-700 font-medium">Email Address</FieldLabel>
+                                <Input
+                                    id="email"
+                                    type="email"
+                                    placeholder="you@example.com"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="bg-slate-50 border-slate-200"
+                                />
+                                <FieldDescription className="text-slate-500 text-xs">
+                                    We'll never share your email.
+                                </FieldDescription>
+                            </Field>
+
+                            <Field className="space-y-2">
+                                <FieldLabel htmlFor="password" className="text-slate-700 font-medium">Password</FieldLabel>
+                                <Input
+                                    id="password"
+                                    type="password"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="bg-slate-50 border-slate-200"
+                                />
+                                <FieldDescription className="text-slate-500 text-xs">
+                                    At least 8 characters
+                                </FieldDescription>
+                            </Field>
+
+                            <Button
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-6"
+                                onClick={onLogin}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? "Signing in..." : "Sign In"}
+                            </Button>
+                        </FieldGroup>
+                    </FieldSet>
+
+                    <p className="text-center text-slate-600 mt-6 text-sm">
+                        Don't have an account?{" "}
+                        <button
+                            onClick={() => window.location.href = "/signup"}
+                            className="text-blue-600 hover:text-blue-700 font-semibold"
+                        >
+                            Sign up
+                        </button>
+                    </p>
+                </div>
+            </div>
         </div>
     )
 }
