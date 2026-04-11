@@ -1,10 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Zap } from "lucide-react";
+import { login } from "../utils/api";
 
 export default function Home() {
     const navigate = useNavigate();
+    const [demoLoading, setDemoLoading] = useState(false);
+    const [demoError, setDemoError] = useState("");
+
+    const handleDemo = async () => {
+        setDemoError("");
+        setDemoLoading(true);
+        try {
+            const data = await login("test@example.com", "test");
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+                window.location.href = "/tasks";
+            } else {
+                setDemoError(data.message || "Demo login failed. Please try again.");
+            }
+        } catch (err) {
+            setDemoError("Network error. Please check your connection.");
+        } finally {
+            setDemoLoading(false);
+        }
+    };
+
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 px-4">
@@ -26,20 +48,35 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button
                         variant="default"
-                        size="lg"
                         onClick={() => navigate("/signup")}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg h-auto"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 text-lg h-auto"
                     >
                         Get Started
                     </Button>
                     <Button
                         variant="outline"
-                        size="lg"
                         onClick={() => navigate("/login")}
-                        className="px-8 py-6 text-lg h-auto border-slate-300"
+                        className="px-8 py-2 text-lg h-auto border-slate-300"
                     >
                         Sign In
                     </Button>
+                </div>
+
+                <div className="mt-6">
+                    <Button
+                        id="home-demo-btn"
+                        variant="ghost"
+                        onClick={handleDemo}
+                        disabled={demoLoading}
+                        className="text-slate-500 hover:text-blue-600 hover:bg-blue-50 px-8 py-2 h-auto text-sm gap-2 border border-dashed border-slate-300 hover:border-blue-300"
+                    >
+                        <Zap className="w-4 h-4" />
+                        {demoLoading ? "Logging in…" : "Try Demo"}
+                    </Button>
+                    {demoError && (
+                        <p className="mt-3 text-sm text-red-500">{demoError}</p>
+                    )}
+                    <p className="mt-2 text-xs text-slate-400">No sign-up needed · Instant access</p>
                 </div>
             </div>
         </div>
