@@ -13,7 +13,7 @@ export default function Home() {
         setDemoError("");
         setDemoLoading(true);
         try {
-            const data = await login("test@example.com", "test");
+            const data = await login("test@example.com", "test@123");
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 window.location.href = "/tasks";
